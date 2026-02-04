@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Tracker Dashboard</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f1115;
+      color: #eaeaea;
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: #14171c;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+    .profile img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    .menu a {
+      display: block;
+      padding: 12px;
+      color: #bbb;
+      text-decoration: none;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    .menu a.active, .menu a:hover {
+      background: #1f2933;
+      color: #00e0c6;
+    }
+
+    /* Main */
+    .main {
+      flex: 1;
+      padding: 25px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: #161a20;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      font-size: 16px;
+      color: #ccc;
+    }
+
+    .list-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #222;
+      font-size: 14px;
+    }
+
+    .badge {
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+    }
+    .marketing { background:#3b82f6; }
+    .sales { background:#ef4444; }
+    .finance { background:#10b981; }
+
+    .quick {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .quick button {
+      background: #1f2933;
+      border: none;
+      padding: 15px;
+      color: #fff;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .quick button:hover {
+      background: #00e0c6;
+      color: #000;
+    }
+
+    .charts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .chart-placeholder {
+      height: 180px;
+      background: linear-gradient(135deg,#1f2933,#111827);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #777;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="profile">
+      <img src="IMG_20230704_223250.jpg" />
+      <div>
+        <strong>Student</strong><br />
+        <small>BSc CSIT</small>
+      </div>
+    </div>
+    <nav class="menu">
+      <a class="active">Home</a>
+      <a>Expenses</a>
+      <a>Trips</a>
+      <a>Approvals</a>
+      <a>Settings</a>
+      <a>Support</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <div class="grid">
+      <!-- Pending Tasks -->
+      <div class="card">
+        <h3>Pending Tasks</h3>
+        <div class="list-item"><span>Pending Approvals</span><span>5</span></div>
+        <div class="list-item"><span>New Expenses</span><span>3</span></div>
+        <div class="list-item"><span>Unreported Expenses</span><span>4</span></div>
+      </div>
+
+      <!-- Recent Expenses -->
+      <div class="card">
+        <h3>Recent Expenses</h3>
+        <div class="list-item"><span>Lunch</span><span class="badge marketing">Food</span></div>
+        <div class="list-item"><span>Travel</span><span class="badge sales">Transport</span></div>
+        <div class="list-item"><span>Stationery</span><span class="badge finance">Study</span></div>
+      </div>
+    </div>
+
+    <!-- Quick Access -->
+    <div class="card" style="margin-top:20px;">
+      <h3>Quick Access</h3>
+      <div class="quick">
+        <button>+ New Expense</button>
+        <button>+ Add Receipt</button>
+        <button>+ Create Report</button>
+        <button>+ Create Trip</button>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts" style="margin-top:20px;">
+      <div class="card">
+        <h3>Monthly Report</h3>
+        <div class="chart-placeholder">Team Spending Trend</div>
+      </div>
+      <div class="card">
+        <h3>Day-to-Day Expenses</h3>
+        <div class="chart-placeholder">Category Wise Expenses</div>
+      </div>
+    </div>
+
+  </main>
+</body>
+</html>
