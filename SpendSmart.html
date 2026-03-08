@@ -714,33 +714,61 @@
 
   <!-- SETTINGS VIEW -->
   <div class="view" id="view-settings">
-    <div class="card" style="max-width:500px">
-      <div class="card-title">Profile Settings</div>
-      <div class="form-group">
-        <div class="form-label">Display Name</div>
-        <input class="form-input" type="text" id="set-name" value="Alex Student" onchange="saveSettings()">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:860px">
+      <div class="card">
+        <div class="card-title">Profile Settings</div>
+        <div class="form-group">
+          <div class="form-label">Display Name</div>
+          <input class="form-input" type="text" id="set-name" value="Alex Student">
+        </div>
+        <div class="form-group">
+          <div class="form-label">Course / Year</div>
+          <input class="form-input" type="text" id="set-course" value="Computer Science · Year 2">
+        </div>
+        <div class="form-group">
+          <div class="form-label">Monthly Budget (in current currency)</div>
+          <input class="form-input" type="number" id="set-budget" value="500">
+        </div>
+        <button class="btn btn-primary" style="margin-top:8px" onclick="saveSettings()">Save Settings</button>
+        <button class="btn btn-outline" style="margin-top:8px;margin-left:8px;border-color:var(--danger);color:var(--danger)" onclick="clearAllData()">🗑 Clear All Data</button>
       </div>
-      <div class="form-group">
-        <div class="form-label">Course / Year</div>
-        <input class="form-input" type="text" id="set-course" value="Computer Science · Year 2" onchange="saveSettings()">
+
+      <div class="card">
+        <div class="card-title">Currency &amp; Conversion</div>
+        <div class="form-group">
+          <div class="form-label">Select Currency</div>
+          <select class="form-select" id="set-currency" onchange="onCurrencyChange()">
+            <option value="NPR">रु — Nepalese Rupee (NPR)</option>
+            <option value="GBP">£ — British Pound (GBP)</option>
+            <option value="USD">$ — US Dollar (USD)</option>
+            <option value="EUR">€ — Euro (EUR)</option>
+            <option value="INR">₹ — Indian Rupee (INR)</option>
+            <option value="JPY">¥ — Japanese Yen (JPY)</option>
+            <option value="AUD">A$ — Australian Dollar (AUD)</option>
+            <option value="CAD">C$ — Canadian Dollar (CAD)</option>
+          </select>
+        </div>
+        <div id="rate-loading" style="display:none;font-size:13px;color:var(--muted);margin-bottom:12px">
+          <span style="display:inline-block;margin-right:6px">⟳</span> Fetching live rates...
+        </div>
+        <div id="rate-error" style="display:none;font-size:12px;color:var(--danger);margin-bottom:12px;padding:10px;background:rgba(248,113,113,0.08);border-radius:8px;border:1px solid rgba(248,113,113,0.2)"></div>
+        <div id="rate-info-box" style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;display:none">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em">Live Exchange Rate</div>
+          <div id="rate-display" style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:var(--accent)">—</div>
+          <div id="rate-sub" style="font-size:11px;color:var(--muted);margin-top:4px">—</div>
+          <div id="rate-time" style="font-size:10px;color:var(--muted);margin-top:6px;opacity:0.6">—</div>
+        </div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="applyConversion()">
+          🔄 Convert All Expenses &amp; Budgets
+        </button>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6">
+          All expense amounts and budgets will be converted using the live rate above.
+        </div>
+        <div style="margin-top:16px">
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">All Rates vs Selected Currency</div>
+          <div id="all-rates-list" style="display:flex;flex-direction:column;gap:6px"></div>
+        </div>
       </div>
-      <div class="form-group">
-        <div class="form-label">Currency Symbol</div>
-        <select class="form-select" id="set-currency" onchange="saveSettings()">
-          <option value="रु">रु (NPR - Nepalese Rupee)</option>
-          <option value="£">£ (GBP)</option>
-          <option value="$">$ (USD)</option>
-          <option value="€">€ (EUR)</option>
-          <option value="₹">₹ (INR)</option>
-          <option value="¥">¥ (JPY)</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <div class="form-label">Monthly Budget</div>
-        <input class="form-input" type="number" id="set-budget" value="500" onchange="saveSettings()">
-      </div>
-      <button class="btn btn-primary" style="margin-top:8px" onclick="saveSettings();showToast('Settings saved ✓')">Save Settings</button>
-      <button class="btn btn-outline" style="margin-top:8px;margin-left:8px;border-color:var(--danger);color:var(--danger)" onclick="clearAllData()">🗑 Clear All Data</button>
     </div>
   </div>
 </main>
@@ -754,7 +782,7 @@
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label class="form-label">Amount (£)</label>
+        <label class="form-label">Amount</label>
         <input class="form-input" type="number" id="exp-amount" placeholder="0.00" step="0.01" min="0">
       </div>
       <div class="form-group">
@@ -811,7 +839,7 @@ let settings = JSON.parse(localStorage.getItem('spendsmart_settings') || '{}');
 let budgets = JSON.parse(localStorage.getItem('spendsmart_budgets') || '{}');
 
 // Defaults
-settings = { name: 'Alex Student', course: 'Computer Science · Year 2', currency: '£', monthlyBudget: 500, ...settings };
+settings = { name: 'Alex Student', course: 'Computer Science · Year 2', currency: 'रु', currencyCode: 'NPR', monthlyBudget: 500, ...settings };
 budgets = { Food: 120, Transport: 60, Study: 80, Social: 80, Health: 60, Other: 100, ...budgets };
 
 const CATS = ['Food', 'Transport', 'Study', 'Social', 'Health', 'Other'];
@@ -819,9 +847,6 @@ const CAT_COLORS = { Food: '#fbbf24', Transport: '#6ee7b7', Study: '#818cf8', So
 const CAT_EMOJI = { Food: '🍔', Transport: '🚌', Study: '📚', Social: '🎉', Health: '💊', Other: '📦' };
 const CAT_CLASS = { Food: 'cat-food', Transport: 'cat-transport', Study: 'cat-study', Social: 'cat-social', Health: 'cat-health', Other: 'cat-other' };
 const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-
-const cur = () => settings.currency;
-const fmt = v => `${cur()}${Number(v).toFixed(2)}`;
 
 // ---- INIT ----
 function init() {
@@ -835,7 +860,7 @@ function init() {
 function applySettings() {
   document.getElementById('set-name').value = settings.name;
   document.getElementById('set-course').value = settings.course;
-  document.getElementById('set-currency').value = settings.currency;
+  document.getElementById('set-currency').value = settings.currencyCode || 'NPR';
   document.getElementById('set-budget').value = settings.monthlyBudget;
   document.querySelector('.profile-name').textContent = settings.name;
   document.querySelector('.profile-role').textContent = settings.course;
@@ -1184,15 +1209,145 @@ function renderSidebarBudget() {
   document.getElementById('sb-amt').textContent = `${fmt(monthAmt)} of ${fmt(budget)} used`;
 }
 
+// ---- CURRENCY SYSTEM ----
+// Maps currency code -> { symbol, decimals }
+const CURRENCY_META = {
+  NPR: { symbol: 'रु', decimals: 0 },
+  GBP: { symbol: '£', decimals: 2 },
+  USD: { symbol: '$', decimals: 2 },
+  EUR: { symbol: '€', decimals: 2 },
+  INR: { symbol: '₹', decimals: 0 },
+  JPY: { symbol: '¥', decimals: 0 },
+  AUD: { symbol: 'A$', decimals: 2 },
+  CAD: { symbol: 'C$', decimals: 2 },
+};
+
+// settings.currencyCode stores the ISO code e.g. "NPR"
+// settings.currency stores the symbol for display
+if (!settings.currencyCode) {
+  // migrate old symbol-based setting
+  const symToCode = { 'रु':'NPR','£':'GBP','$':'USD','€':'EUR','₹':'INR','¥':'JPY' };
+  settings.currencyCode = symToCode[settings.currency] || 'NPR';
+  settings.currency = CURRENCY_META[settings.currencyCode].symbol;
+}
+
+let liveRates = {}; // base = selected currency, e.g. { USD: 1, NPR: 134.5, GBP: 0.79, ... }
+let pendingCurrencyCode = settings.currencyCode; // what user has selected but not yet applied
+
+const cur = () => settings.currency;
+const fmt = (v) => {
+  const meta = CURRENCY_META[settings.currencyCode] || { symbol: settings.currency, decimals: 2 };
+  return `${meta.symbol}${Number(v).toFixed(meta.decimals)}`;
+};
+
+async function fetchRates(baseCurrency) {
+  document.getElementById('rate-loading').style.display = 'block';
+  document.getElementById('rate-error').style.display = 'none';
+  document.getElementById('rate-info-box').style.display = 'none';
+  document.getElementById('all-rates-list').innerHTML = '';
+  try {
+    // Free, no-key API
+    const res = await fetch(`https://open.er-api.com/v6/latest/${baseCurrency}`);
+    if (!res.ok) throw new Error('API error');
+    const data = await res.json();
+    if (data.result !== 'success') throw new Error(data['error-type'] || 'Failed');
+    liveRates = data.rates;
+    document.getElementById('rate-loading').style.display = 'none';
+    showRateInfo(baseCurrency, data.time_last_update_utc);
+    showAllRates(baseCurrency);
+  } catch(e) {
+    document.getElementById('rate-loading').style.display = 'none';
+    document.getElementById('rate-error').style.display = 'block';
+    document.getElementById('rate-error').textContent = `⚠️ Could not fetch live rates (${e.message}). Check your internet connection.`;
+    liveRates = {};
+  }
+}
+
+function showRateInfo(base, updatedAt) {
+  const box = document.getElementById('rate-info-box');
+  const meta = CURRENCY_META[base];
+  // Show a few key conversions
+  const pairs = Object.keys(CURRENCY_META).filter(c => c !== base).slice(0,3);
+  const examples = pairs.map(c => {
+    const rate = liveRates[c];
+    if (!rate) return '';
+    return `1 ${CURRENCY_META[base].symbol} = ${CURRENCY_META[c].symbol}${rate.toFixed(CURRENCY_META[c].decimals === 0 ? 0 : 4)}`;
+  }).filter(Boolean).join('  ·  ');
+  document.getElementById('rate-display').textContent = `1 ${base} = ${liveRates['USD'] ? CURRENCY_META['USD'].symbol + liveRates['USD'].toFixed(4) : '—'}`;
+  document.getElementById('rate-sub').textContent = examples;
+  document.getElementById('rate-time').textContent = `Rates updated: ${updatedAt ? new Date(updatedAt).toLocaleString() : 'unknown'}`;
+  box.style.display = 'block';
+}
+
+function showAllRates(base) {
+  const list = document.getElementById('all-rates-list');
+  const codes = Object.keys(CURRENCY_META).filter(c => c !== base);
+  list.innerHTML = codes.map(c => {
+    const rate = liveRates[c];
+    const meta = CURRENCY_META[c];
+    const baseMeta = CURRENCY_META[base];
+    return `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--bg);border-radius:8px;border:1px solid var(--border)">
+        <span style="font-size:13px;color:var(--muted)">${baseMeta.symbol}1 ${base}</span>
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--text)">${rate ? meta.symbol + rate.toFixed(meta.decimals === 0 ? 2 : 4) : '—'} <span style="font-size:11px;color:var(--muted)">${c}</span></span>
+      </div>`;
+  }).join('');
+}
+
+function onCurrencyChange() {
+  pendingCurrencyCode = document.getElementById('set-currency').value;
+  fetchRates(pendingCurrencyCode);
+}
+
+async function applyConversion() {
+  const newCode = document.getElementById('set-currency').value;
+  const oldCode = settings.currencyCode;
+  if (newCode === oldCode) { showToast('Already using this currency ✓'); return; }
+  if (!liveRates || Object.keys(liveRates).length === 0) {
+    showToast('No rates loaded. Check internet connection ⚠️', true); return;
+  }
+  // liveRates is based on newCode, so liveRates[oldCode] = how many oldCode per 1 newCode
+  // To convert oldCode -> newCode: amount / liveRates[oldCode]
+  const rate = liveRates[oldCode];
+  if (!rate) { showToast(`No rate found for ${oldCode} ⚠️`, true); return; }
+  const conversionRate = 1 / rate; // multiply old amounts by this to get new currency
+
+  const fromMeta = CURRENCY_META[oldCode];
+  const toMeta = CURRENCY_META[newCode];
+
+  if (!confirm(`Convert all expenses from ${fromMeta.symbol}(${oldCode}) → ${toMeta.symbol}(${newCode})?\nRate: 1 ${oldCode} = ${toMeta.symbol}${conversionRate.toFixed(4)}\n\nThis will update all ${expenses.length} expense(s) and budgets.`)) return;
+
+  // Convert all expenses
+  expenses = expenses.map(e => ({ ...e, amount: parseFloat((e.amount * conversionRate).toFixed(toMeta.decimals === 0 ? 2 : 4)) }));
+
+  // Convert budgets
+  CATS.forEach(c => { budgets[c] = parseFloat(((budgets[c]||0) * conversionRate).toFixed(2)); });
+
+  // Convert monthly budget
+  settings.monthlyBudget = parseFloat((settings.monthlyBudget * conversionRate).toFixed(2));
+
+  // Apply new currency
+  settings.currencyCode = newCode;
+  settings.currency = toMeta.symbol;
+
+  saveExpenses();
+  localStorage.setItem('spendsmart_budgets', JSON.stringify(budgets));
+  localStorage.setItem('spendsmart_settings', JSON.stringify(settings));
+
+  applySettings();
+  renderAll();
+  showToast(`✅ Converted to ${toMeta.symbol} ${newCode} (rate: ${conversionRate.toFixed(4)})`);
+}
+
 // ---- SETTINGS ----
 function saveSettings() {
   settings.name = document.getElementById('set-name').value;
   settings.course = document.getElementById('set-course').value;
-  settings.currency = document.getElementById('set-currency').value;
   settings.monthlyBudget = parseFloat(document.getElementById('set-budget').value) || 500;
   localStorage.setItem('spendsmart_settings', JSON.stringify(settings));
   applySettings();
   renderAll();
+  showToast('Settings saved ✓');
 }
 
 function clearAllData() {
@@ -1240,11 +1395,11 @@ if (!expenses.length) {
   const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
   const yest = yesterday.toISOString().split('T')[0];
   const samples = [
-    { id: 1, amount: 4.50, desc: 'Coffee & muffin', cat: 'Food', date: today, note: '', payment: 'Card' },
-    { id: 2, amount: 2.80, desc: 'Bus fare', cat: 'Transport', date: today, note: '', payment: 'Card' },
-    { id: 3, amount: 12.99, desc: 'Textbook chapter', cat: 'Study', date: yest, note: 'PDF download', payment: 'Card' },
-    { id: 4, amount: 18.50, desc: 'Cinema with friends', cat: 'Social', date: yest, note: '', payment: 'Cash' },
-    { id: 5, amount: 35.00, desc: 'Grocery shopping', cat: 'Food', date: yest, note: 'Weekly shop', payment: 'Card' },
+    { id: 1, amount: 150, desc: 'Coffee & muffin', cat: 'Food', date: today, note: '', payment: 'Card' },
+    { id: 2, amount: 80, desc: 'Bus fare', cat: 'Transport', date: today, note: '', payment: 'Card' },
+    { id: 3, amount: 450, desc: 'Textbook chapter', cat: 'Study', date: yest, note: 'PDF download', payment: 'Card' },
+    { id: 4, amount: 600, desc: 'Cinema with friends', cat: 'Social', date: yest, note: '', payment: 'Cash' },
+    { id: 5, amount: 1200, desc: 'Grocery shopping', cat: 'Food', date: yest, note: 'Weekly shop', payment: 'Card' },
   ];
   expenses = samples;
   saveExpenses();
