@@ -370,7 +370,121 @@
   .view { display: none; }
   .view.active { display: block; }
 
-  /* RESPONSIVE */
+  /* ---- LOGIN SCREEN ---- */
+  .login-screen {
+    position: fixed; inset: 0;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 999;
+    flex-direction: column;
+    gap: 0;
+  }
+  .login-screen.hidden { display: none; }
+  .login-brand {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 32px;
+  }
+  .login-brand-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: linear-gradient(135deg, #6ee7b7, #818cf8);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .login-brand-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 24px; font-weight: 700; color: var(--text);
+  }
+  .login-brand-sub { font-size: 12px; color: var(--muted); }
+  .login-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 36px 28px;
+    width: 400px; max-width: 94vw;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+  }
+  .login-tabs {
+    display: flex; gap: 0; margin-bottom: 28px;
+    background: var(--bg); border-radius: 10px; padding: 4px;
+  }
+  .login-tab {
+    flex: 1; text-align: center; padding: 9px;
+    border-radius: 8px; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; color: var(--muted);
+    border: none; background: none; font-family: 'DM Sans', sans-serif;
+  }
+  .login-tab.active { background: var(--card); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .login-form { display: flex; flex-direction: column; gap: 14px; }
+  .login-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+  .login-subtitle { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .login-input-wrap { position: relative; }
+  .login-input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 15px; pointer-events: none; }
+  .login-input {
+    width: 100%; background: var(--bg);
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 14px 12px 38px; color: var(--text);
+    font-size: 14px; font-family: 'DM Sans', sans-serif;
+    outline: none; transition: border-color 0.2s;
+  }
+  .login-input:focus { border-color: var(--accent); }
+  .login-btn {
+    width: 100%; padding: 13px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: var(--bg); font-size: 14px; font-weight: 700;
+    border: none; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s; margin-top: 4px;
+  }
+  .login-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(110,231,183,0.3); }
+  .login-error {
+    background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.25);
+    color: var(--danger); border-radius: 8px; padding: 10px 12px;
+    font-size: 12px; display: none;
+  }
+  .login-error.show { display: block; }
+  .login-success {
+    background: rgba(110,231,183,0.1); border: 1px solid rgba(110,231,183,0.25);
+    color: var(--accent); border-radius: 8px; padding: 10px 12px;
+    font-size: 12px; display: none;
+  }
+  .login-success.show { display: block; }
+  .login-divider { display: flex; align-items: center; gap: 10px; margin: 4px 0; }
+  .login-divider::before, .login-divider::after { content:''; flex:1; height:1px; background: var(--border); }
+  .login-divider span { font-size: 11px; color: var(--muted); }
+  .demo-btn {
+    width: 100%; padding: 10px; border-radius: 10px;
+    background: transparent; border: 1px solid var(--border);
+    color: var(--muted); font-size: 12px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+  }
+  .demo-btn:hover { border-color: var(--accent); color: var(--text); }
+  .users-preview {
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 11px; color: var(--muted); text-align: center;
+  }
+
+  /* ---- BUDGET BAR DYNAMIC COLOR ---- */
+  .bar-fill.budget-green {
+    background: linear-gradient(90deg, #34d399, #6ee7b7);
+  }
+  .bar-fill.budget-yellow {
+    background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  }
+  .bar-fill.budget-red {
+    background: linear-gradient(90deg, #ef4444, #f87171);
+    animation: pulse-red 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse-red {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+  .budget-bar-wrap.state-green { border-color: rgba(52,211,153,0.25); }
+  .budget-bar-wrap.state-yellow { border-color: rgba(245,158,11,0.35); background: rgba(245,158,11,0.04); }
+  .budget-bar-wrap.state-red { border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.06); }
+  #sb-pct.pct-green { color: #34d399; }
+  #sb-pct.pct-yellow { color: #fbbf24; }
+  #sb-pct.pct-red { color: #f87171; }
+  .budget-status-icon { font-size: 13px; margin-right: 4px; }
   @media (max-width: 900px) {
     .grid-4, .quick-grid { grid-template-columns: repeat(2, 1fr); }
     .charts-row, .grid-2 { grid-template-columns: 1fr; }
@@ -423,6 +537,76 @@
 </head>
 <body>
 
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-brand">
+    <div class="login-brand-icon">💰</div>
+    <div>
+      <div class="login-brand-name">SpendSmart</div>
+      <div class="login-brand-sub">Student Expense Tracker</div>
+    </div>
+  </div>
+  <div class="login-card">
+    <div class="login-tabs">
+      <button class="login-tab active" id="tab-login" onclick="switchLoginTab('login')">Sign In</button>
+      <button class="login-tab" id="tab-register" onclick="switchLoginTab('register')">Sign Up</button>
+    </div>
+
+    <!-- SIGN IN FORM -->
+    <div id="form-login">
+      <div class="login-title">Welcome back 👋</div>
+      <div class="login-subtitle" style="margin-bottom:18px">Sign in to your account</div>
+      <div class="login-form">
+        <div id="login-error" class="login-error"></div>
+        <div class="login-input-wrap">
+          <span class="login-input-icon">👤</span>
+          <input class="login-input" type="text" id="li-username" placeholder="Username" autocomplete="username">
+        </div>
+        <div class="login-input-wrap">
+          <span class="login-input-icon">🔒</span>
+          <input class="login-input" type="password" id="li-password" placeholder="Password" autocomplete="current-password">
+        </div>
+        <button class="login-btn" onclick="doLogin()">Sign In →</button>
+        <div class="login-divider"><span>or try a demo</span></div>
+        <button class="demo-btn" onclick="demoLogin()">🚀 Continue as Demo Student</button>
+      </div>
+    </div>
+
+    <!-- SIGN UP FORM -->
+    <div id="form-register" style="display:none">
+      <div class="login-title">Create account ✨</div>
+      <div class="login-subtitle" style="margin-bottom:18px">Start tracking your expenses</div>
+      <div class="login-form">
+        <div id="register-error" class="login-error"></div>
+        <div id="register-success" class="login-success"></div>
+        <div class="login-input-wrap">
+          <span class="login-input-icon">🎓</span>
+          <input class="login-input" type="text" id="reg-name" placeholder="Full Name">
+        </div>
+        <div class="login-input-wrap">
+          <span class="login-input-icon">👤</span>
+          <input class="login-input" type="text" id="reg-username" placeholder="Username (no spaces)">
+        </div>
+        <div class="login-input-wrap">
+          <span class="login-input-icon">📚</span>
+          <input class="login-input" type="text" id="reg-course" placeholder="Course & Year (e.g. BCA Year 1)">
+        </div>
+        <div class="login-input-wrap">
+          <span class="login-input-icon">🔒</span>
+          <input class="login-input" type="password" id="reg-password" placeholder="Password (min 4 chars)">
+        </div>
+        <div class="login-input-wrap">
+          <span class="login-input-icon">🔒</span>
+          <input class="login-input" type="password" id="reg-password2" placeholder="Confirm Password">
+        </div>
+        <button class="login-btn" onclick="doRegister()">Create Account →</button>
+      </div>
+    </div>
+
+    <div class="users-preview" id="users-preview"></div>
+  </div>
+</div>
+
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="profile">
@@ -448,13 +632,18 @@
     </div>
   </nav>
   <div class="sidebar-footer">
-    <div class="budget-bar-wrap">
+    <div class="budget-bar-wrap" id="budget-bar-wrap">
       <div class="budget-bar-label">
-        <span>Monthly Budget</span>
-        <span id="sb-pct">0%</span>
+        <span><span class="budget-status-icon" id="budget-status-icon">🟢</span>Monthly Budget</span>
+        <span id="sb-pct" class="pct-green">0%</span>
       </div>
-      <div class="bar-track"><div class="bar-fill" id="sb-fill" style="width:0%"></div></div>
-      <div style="font-size:11px;color:var(--muted);margin-top:6px;" id="sb-amt">£0 of £500 used</div>
+      <div class="bar-track"><div class="bar-fill budget-green" id="sb-fill" style="width:0%"></div></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px;" id="sb-amt">रु0 of रु500 used</div>
+    </div>
+    <div style="margin-top:10px">
+      <button class="nav-item" style="width:100%;border:none;color:var(--danger);background:rgba(248,113,113,0.07);border-radius:10px" onclick="doLogout()">
+        <span class="icon">🚪</span><span class="nav-label">Logout</span>
+      </button>
     </div>
   </div>
 </aside>
@@ -1199,13 +1388,41 @@ function renderReportsView() {
   }
 }
 
-// ---- SIDEBAR BUDGET ----
+// ---- SIDEBAR BUDGET with dynamic color ----
 function renderSidebarBudget() {
   const monthAmt = sumExpenses(e => isThisMonth(e.date));
   const budget = settings.monthlyBudget;
-  const pct = Math.min((monthAmt/budget)*100, 100);
-  document.getElementById('sb-fill').style.width = `${pct}%`;
-  document.getElementById('sb-pct').textContent = `${Math.round(pct)}%`;
+  const pct = budget > 0 ? Math.min((monthAmt / budget) * 100, 100) : 0;
+
+  const fill = document.getElementById('sb-fill');
+  const pctEl = document.getElementById('sb-pct');
+  const wrap = document.getElementById('budget-bar-wrap');
+  const icon = document.getElementById('budget-status-icon');
+
+  // Remove all state classes
+  fill.classList.remove('budget-green', 'budget-yellow', 'budget-red');
+  pctEl.classList.remove('pct-green', 'pct-yellow', 'pct-red');
+  wrap.classList.remove('state-green', 'state-yellow', 'state-red');
+
+  if (pct >= 85) {
+    fill.classList.add('budget-red');
+    pctEl.classList.add('pct-red');
+    wrap.classList.add('state-red');
+    icon.textContent = '🔴';
+  } else if (pct >= 50) {
+    fill.classList.add('budget-yellow');
+    pctEl.classList.add('pct-yellow');
+    wrap.classList.add('state-yellow');
+    icon.textContent = '🟡';
+  } else {
+    fill.classList.add('budget-green');
+    pctEl.classList.add('pct-green');
+    wrap.classList.add('state-green');
+    icon.textContent = '🟢';
+  }
+
+  fill.style.width = `${pct}%`;
+  pctEl.textContent = `${Math.round(pct)}%`;
   document.getElementById('sb-amt').textContent = `${fmt(monthAmt)} of ${fmt(budget)} used`;
 }
 
@@ -1331,8 +1548,10 @@ async function applyConversion() {
   settings.currency = toMeta.symbol;
 
   saveExpenses();
-  localStorage.setItem('spendsmart_budgets', JSON.stringify(budgets));
-  localStorage.setItem('spendsmart_settings', JSON.stringify(settings));
+  const bKey = currentUser ? getUserKey(currentUser.username, 'budgets') : 'spendsmart_budgets';
+  localStorage.setItem(bKey, JSON.stringify(budgets));
+  const sKey = currentUser ? getUserKey(currentUser.username, 'settings') : 'spendsmart_settings';
+  localStorage.setItem(sKey, JSON.stringify(settings));
 
   applySettings();
   renderAll();
@@ -1344,7 +1563,10 @@ function saveSettings() {
   settings.name = document.getElementById('set-name').value;
   settings.course = document.getElementById('set-course').value;
   settings.monthlyBudget = parseFloat(document.getElementById('set-budget').value) || 500;
-  localStorage.setItem('spendsmart_settings', JSON.stringify(settings));
+  const sKey = currentUser ? getUserKey(currentUser.username, 'settings') : 'spendsmart_settings';
+  localStorage.setItem(sKey, JSON.stringify(settings));
+  // Update sidebar profile name if changed
+  if (currentUser) { currentUser.name = settings.name; currentUser.course = settings.course; }
   applySettings();
   renderAll();
   showToast('Settings saved ✓');
@@ -1389,23 +1611,195 @@ document.addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 'n') { e.preventDefault(); openModal(); }
 });
 
-// Load sample data if empty
-if (!expenses.length) {
-  const today = todayStr();
-  const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
-  const yest = yesterday.toISOString().split('T')[0];
-  const samples = [
-    { id: 1, amount: 150, desc: 'Coffee & muffin', cat: 'Food', date: today, note: '', payment: 'Card' },
-    { id: 2, amount: 80, desc: 'Bus fare', cat: 'Transport', date: today, note: '', payment: 'Card' },
-    { id: 3, amount: 450, desc: 'Textbook chapter', cat: 'Study', date: yest, note: 'PDF download', payment: 'Card' },
-    { id: 4, amount: 600, desc: 'Cinema with friends', cat: 'Social', date: yest, note: '', payment: 'Cash' },
-    { id: 5, amount: 1200, desc: 'Grocery shopping', cat: 'Food', date: yest, note: 'Weekly shop', payment: 'Card' },
-  ];
-  expenses = samples;
-  saveExpenses();
+// ======== AUTH SYSTEM ========
+let currentUser = null; // { username, name, course }
+
+function getUsers() {
+  return JSON.parse(localStorage.getItem('spendsmart_users') || '{}');
+}
+function saveUsers(users) {
+  localStorage.setItem('spendsmart_users', JSON.stringify(users));
+}
+function getUserKey(username, key) {
+  return `spendsmart_${username}_${key}`;
 }
 
-init();
+function switchLoginTab(tab) {
+  document.getElementById('form-login').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('form-register').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+  clearLoginErrors();
+  showRegisteredUsers();
+}
+
+function clearLoginErrors() {
+  ['login-error','register-error','register-success'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.classList.remove('show'); el.textContent = ''; }
+  });
+}
+
+function showRegisteredUsers() {
+  const users = getUsers();
+  const names = Object.values(users).map(u => u.name);
+  const preview = document.getElementById('users-preview');
+  if (!preview) return;
+  if (names.length === 0) {
+    preview.innerHTML = '<span>No accounts yet — be the first to sign up!</span>';
+  } else {
+    preview.innerHTML = `<span>Registered users: ${names.map(n=>`<b style="color:var(--text)">${n}</b>`).join(', ')}</span>`;
+  }
+}
+
+function doRegister() {
+  const name = document.getElementById('reg-name').value.trim();
+  const username = document.getElementById('reg-username').value.trim().toLowerCase().replace(/\s+/g,'');
+  const course = document.getElementById('reg-course').value.trim();
+  const pw = document.getElementById('reg-password').value;
+  const pw2 = document.getElementById('reg-password2').value;
+  const errEl = document.getElementById('register-error');
+  const sucEl = document.getElementById('register-success');
+
+  errEl.classList.remove('show');
+  sucEl.classList.remove('show');
+
+  if (!name || !username || !pw) { errEl.textContent = 'Please fill in all required fields.'; errEl.classList.add('show'); return; }
+  if (username.length < 3) { errEl.textContent = 'Username must be at least 3 characters.'; errEl.classList.add('show'); return; }
+  if (pw.length < 4) { errEl.textContent = 'Password must be at least 4 characters.'; errEl.classList.add('show'); return; }
+  if (pw !== pw2) { errEl.textContent = 'Passwords do not match.'; errEl.classList.add('show'); return; }
+
+  const users = getUsers();
+  if (users[username]) { errEl.textContent = 'Username already taken. Please choose another.'; errEl.classList.add('show'); return; }
+
+  users[username] = { username, name, course: course || 'Student', password: btoa(pw) };
+  saveUsers(users);
+
+  sucEl.textContent = `✅ Account created for ${name}! You can now sign in.`;
+  sucEl.classList.add('show');
+  document.getElementById('reg-name').value = '';
+  document.getElementById('reg-username').value = '';
+  document.getElementById('reg-course').value = '';
+  document.getElementById('reg-password').value = '';
+  document.getElementById('reg-password2').value = '';
+  showRegisteredUsers();
+  setTimeout(() => switchLoginTab('login'), 1800);
+}
+
+function doLogin() {
+  const username = document.getElementById('li-username').value.trim().toLowerCase();
+  const pw = document.getElementById('li-password').value;
+  const errEl = document.getElementById('login-error');
+  errEl.classList.remove('show');
+
+  if (!username || !pw) { errEl.textContent = 'Please enter your username and password.'; errEl.classList.add('show'); return; }
+
+  const users = getUsers();
+  const user = users[username];
+  if (!user || atob(user.password) !== pw) {
+    errEl.textContent = 'Incorrect username or password.';
+    errEl.classList.add('show'); return;
+  }
+
+  loginSuccess(user);
+}
+
+function demoLogin() {
+  const demoUser = { username: 'demo', name: 'Demo Student', course: 'Computer Science · Year 2' };
+  // Ensure demo data exists
+  if (!localStorage.getItem(getUserKey('demo', 'expenses'))) {
+    const today = new Date().toISOString().split('T')[0];
+    const yest = new Date(); yest.setDate(yest.getDate()-1);
+    const y = yest.toISOString().split('T')[0];
+    const demoExp = [
+      { id: 1, amount: 150, desc: 'Coffee & muffin', cat: 'Food', date: today, note: '', payment: 'Card' },
+      { id: 2, amount: 80, desc: 'Bus fare', cat: 'Transport', date: today, note: '', payment: 'Card' },
+      { id: 3, amount: 450, desc: 'Textbook chapter', cat: 'Study', date: y, note: 'PDF download', payment: 'Card' },
+      { id: 4, amount: 600, desc: 'Cinema with friends', cat: 'Social', date: y, note: '', payment: 'Cash' },
+      { id: 5, amount: 1200, desc: 'Grocery shopping', cat: 'Food', date: y, note: 'Weekly shop', payment: 'Card' },
+    ];
+    localStorage.setItem(getUserKey('demo', 'expenses'), JSON.stringify(demoExp));
+  }
+  loginSuccess(demoUser);
+}
+
+function loginSuccess(user) {
+  currentUser = user;
+  localStorage.setItem('spendsmart_current_user', JSON.stringify(user));
+
+  // Load this user's data
+  const userExpenses = localStorage.getItem(getUserKey(user.username, 'expenses'));
+  const userSettings = localStorage.getItem(getUserKey(user.username, 'settings'));
+  const userBudgets = localStorage.getItem(getUserKey(user.username, 'budgets'));
+
+  expenses = userExpenses ? JSON.parse(userExpenses) : [];
+  settings = userSettings ? JSON.parse(userSettings) : {
+    name: user.name, course: user.course,
+    currency: 'रु', currencyCode: 'NPR', monthlyBudget: 5000
+  };
+  settings.name = user.name;
+  settings.course = user.course;
+  budgets = userBudgets ? JSON.parse(userBudgets) : { Food: 1200, Transport: 600, Study: 800, Social: 800, Health: 600, Other: 1000 };
+
+  document.getElementById('login-screen').classList.add('hidden');
+  applySettings();
+  renderAll();
+}
+
+function doLogout() {
+  if (!confirm('Log out?')) return;
+  // Save current user's data before logout
+  if (currentUser) {
+    localStorage.setItem(getUserKey(currentUser.username, 'expenses'), JSON.stringify(expenses));
+    localStorage.setItem(getUserKey(currentUser.username, 'settings'), JSON.stringify(settings));
+    localStorage.setItem(getUserKey(currentUser.username, 'budgets'), JSON.stringify(budgets));
+  }
+  currentUser = null;
+  localStorage.removeItem('spendsmart_current_user');
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('li-username').value = '';
+  document.getElementById('li-password').value = '';
+  clearLoginErrors();
+  switchLoginTab('login');
+  showRegisteredUsers();
+}
+
+// Patch saveExpenses to save per-user
+const _origSaveExpenses = saveExpenses;
+function saveExpenses() {
+  if (currentUser) localStorage.setItem(getUserKey(currentUser.username, 'expenses'), JSON.stringify(expenses));
+  else localStorage.setItem('spendsmart_expenses', JSON.stringify(expenses));
+}
+
+// Patch saveBudget to save per-user
+function saveBudget() {
+  settings.monthlyBudget = parseFloat(document.getElementById('total-budget-input')?.value) || 500;
+  CATS.forEach(c => {
+    const inp = document.getElementById(`budget-${c}`);
+    if (inp) budgets[c] = parseFloat(inp.value) || 0;
+  });
+  const bKey = currentUser ? getUserKey(currentUser.username, 'budgets') : 'spendsmart_budgets';
+  localStorage.setItem(bKey, JSON.stringify(budgets));
+  const sKey = currentUser ? getUserKey(currentUser.username, 'settings') : 'spendsmart_settings';
+  localStorage.setItem(sKey, JSON.stringify(settings));
+  renderAll();
+}
+
+// Check if already logged in
+const savedUser = localStorage.getItem('spendsmart_current_user');
+if (savedUser) {
+  try { loginSuccess(JSON.parse(savedUser)); } catch(e) { showRegisteredUsers(); }
+} else {
+  showRegisteredUsers();
+}
+
+// Add Enter key support for login
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !document.getElementById('login-screen').classList.contains('hidden')) {
+    const activeForm = document.getElementById('form-login').style.display !== 'none' ? 'login' : 'register';
+    if (activeForm === 'login') doLogin(); else doRegister();
+  }
+});
 </script>
 </body>
 </html>
